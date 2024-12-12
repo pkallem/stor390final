@@ -7,13 +7,15 @@ fontsize: 12pt
 header-includes:
   - \usepackage{hanging}
 ---
-The paper _"Risk-aware Motion Planning for Autonomous Vehicles with Safety Specifications"_ by Nyberg et al. presents a thoughtful and innovative framework for tackling the problem of risk in autonomous vehicle decision-making. The central contribution of the paper lies in its development of a risk measure that allows autonomous vehicles to balance safety with progress in uncertain traffic environments (Nyberg et al., 2021). This critique will explore both the statistical methodology and the ethical implications presented by the authors, focusing on how risk is quantified and how acceptable risk is justified in autonomous vehicle planning. By addressing the statistical techniques used and the normative concerns of safety trade-offs, this essay aims to provide a comprehensive evaluation of the framework.
+The paper _"Risk-aware Motion Planning for Autonomous Vehicles with Safety Specifications"_ by Nyberg et al. introduces a probabilistic approach to decision-making in autonomous vehicles, where quantifying both the likelihood and severity of potential safety violations enables a more balanced navigation of uncertain traffic conditions (Nyberg et al., 2021). This critique examines their statistical methods and the ethical considerations of allowing controlled rule deviations, aiming to assess how well the authors justify and implement their strategy for reconciling safety with operational progress.
 
-In the field of autonomous vehicles, ensuring safety is paramount, yet rigidly adhering to safety specifications in all circumstances can impede progress. To elaborate on the trade-offs involved, it is essential to understand that balancing safety with efficiency requires autonomous systems to make nuanced decisions that consider both immediate safety concerns and longer-term operational effectiveness. The challenge arises when autonomous vehicles operate in environments where uncertainties—such as unpredictable actions by other vehicles or noisy sensor data—make it difficult to guarantee absolute safety. Traditional motion planning methods often use conservative assumptions about these uncertainties, which can lead to overly cautious behavior, such as the “freezing robot problem,” where the vehicle is unable to proceed safely in any direction. For instance, pedestrians can take advantage of the vehicle's tendency to stop and intentionally force the vehicle to stop. In busy areas with high foot-traffic around the vehicle, no progress would be made ultimately forcing the vehicle to remain at a halt (Camara & Fox, 2022). Nyberg et al. address this issue by incorporating a probabilistic risk measure into the planning process, allowing the vehicle to evaluate both the likelihood and severity of safety violations before making decisions.
+In the realm of autonomous vehicles, striving for absolute safety can obstruct necessary movement, especially in environments where unpredictable factors—like fluctuating traffic flows or imprecise sensor data—are unavoidable. Understanding that prudent compromises may be necessary, the authors recognize that relying solely on conservative safety assumptions can lead to paralysis in complex scenarios.Z Traditional motion planning methods often use conservative assumptions about these uncertainties, which can lead to overly cautious behavior, such as the “freezing robot problem,” where the vehicle is unable to proceed safely in any direction. For instance, pedestrians can take advantage of the vehicle's tendency to stop and intentionally force the vehicle to stop. In busy areas with high foot-traffic around the vehicle, no progress would be made ultimately forcing the vehicle to remain at a halt (Camara & Fox, 2022). Nyberg et al. address this issue by introducing a statistical risk measure that permits careful, probabilistic calculation of when and how minor safety breaches might still serve a greater operational good.
 
-The authors’ approach hinges on the idea that in uncertain environments, autonomous vehicles need to weigh the risks of violating safety rules against the potential benefits of making progress. This is a departure from conventional planning methods, which tend to assume a worst-case scenario when evaluating safety. By shifting the focus to probabilistic risk measures, the authors allow for more flexibility in the vehicle’s decision-making, particularly in cases where small, controlled violations of safety specifications may be acceptable if they lead to overall better outcomes, such as reduced congestion or improved traffic flow (Nyberg et al., 2021).
+By adopting a probabilistic risk framework, Nyberg et al. depart from deterministic worst-case planning and embrace a model in which small, carefully managed violations of safety standards can sometimes yield improved overall outcomes, such as easing congestion or accelerating traffic flow (Nyberg et al., 2021). This shift underscores the value of a nuanced risk metric that acknowledges uncertainty, enabling autonomous vehicles to make choices that are neither overly cautious nor ethically careless. In doing so, the authors pave the way for a more flexible, context-sensitive approach to risk-aware motion planning, where technical rigor aligns with pragmatic navigation in real-world conditions.
 
 ## Analysis of Methods
+
+### Modeling Uncertainty with Probabilistic Distributions
 
 Nyberg et al.’s framework hinges on modeling uncertainty using probabilistic distributions. Key vehicle state variables, such as positions and velocities, are treated as random variables. The assumption of multivariate Gaussian distributions for these variables is justified by their alignment with real-world sensor noise and traffic behavior patterns. Gaussian distributions effectively capture natural variability and correlations, such as the interdependence between a vehicle’s velocity and following distance. This probabilistic approach allows AVs to plan for both expected and unexpected scenarios, making decisions that balance safety and operational efficiency. The authors propose a novel risk measure that combines the likelihood and severity of safety violations. Unlike conventional metrics such as Value-at-Risk (VaR) or Conditional Value-at-Risk (CVaR), which emphasize extreme outcomes, the expected severity measure \(E[L]\) evaluates the full distribution of potential risks. This nuanced approach enables AVs to make informed trade-offs, such as briefly reducing a safe following distance to improve traffic flow, while accounting for both the probability and impact of such decisions. This balance between risk and efficiency underscores the strength of \(E[L]\) as a comprehensive and practical risk metric.
 
@@ -21,15 +23,17 @@ To validate the framework, Nyberg et al. conducted simulations comparing Gaussia
 
 Despite its strengths, the framework’s reliance on Gaussian distributions may overlook non-Gaussian behaviors, such as erratic driver actions or heavy-tailed uncertainties. Addressing these scenarios may require more flexible models, such as Gaussian mixtures or nonparametric approaches, which can better capture the variability inherent in complex traffic environments. Additionally, fixed parameters like braking decelerations and reaction times could be dynamically estimated using real-time data to enhance the model’s adaptability. Incorporating such refinements would ensure that the framework remains robust and applicable across a broader range of scenarios, including edge cases with unusual behaviors.
 
-Nyberg et al.’s study addresses the significant challenge of motion planning for autonomous vehicles (AVs) in uncertain traffic scenarios, where balancing safety and progress is critical. The authors introduce a novel risk measure that incorporates both the probability of safety violations and their expected severity. This dual consideration ensures that the methodology effectively addresses the inherent trade-offs in AV navigation. A purely conservative approach, focused solely on minimizing risk, could lead to inefficiencies, while an overly aggressive strategy might compromise safety. By integrating both dimensions, Nyberg et al.’s framework allows AVs to make informed, balanced decisions that are crucial in dynamic and unpredictable environments.
+Nyberg et al.’s study addresses the significant challenge of motion planning for autonomous vehicles (AVs) in uncertain traffic scenarios, where balancing safety and progress is critical. This dual consideration ensures that the methodology effectively addresses the inherent trade-offs in AV navigation. A purely conservative approach, focused solely on minimizing risk, could lead to inefficiencies, while an overly aggressive strategy might compromise safety. By integrating both dimensions, Nyberg et al.’s framework allows AVs to make informed, balanced decisions that are crucial in dynamic and unpredictable environments.
 
 The approach leverages probabilistic modeling, where key vehicle state variables, such as position and velocity, are represented as random variables with multivariate Gaussian distributions. These assumptions are pivotal for the framework’s efficacy, as they allow for robust uncertainty modeling and computational efficiency. Gaussian distributions are particularly suitable in this context because they provide a mathematically tractable way to model continuous random phenomena. In traffic scenarios, factors such as driver inputs, sensor noise, road conditions, and mechanical variations naturally aggregate into distributions that approximate normality, aligning well with the Central Limit Theorem. This alignment provides a strong theoretical basis for the use of Gaussian models to represent such uncertainties effectively.
+
+### Empirical Validation of Probabilistic Assumptions and Risk Measures
 
 The choice of the multivariate Gaussian distribution for variables such as vehicle positions and velocities is further justified by the strong correlations often observed in traffic dynamics. For instance, the velocity of a lead vehicle directly influences the following distance and velocity adjustments of an ego vehicle. These dependencies are captured in the covariance structure of the multivariate Gaussian model, enabling the framework to model interdependent uncertainties with precision. This capability is especially important when AVs must predict the behaviors of surrounding vehicles to ensure safe interactions in real-time. Additionally, sensor systems deployed in AVs, such as radar, lidar, and cameras, frequently produce Gaussian noise due to the underlying electronic processes involved in capturing measurements. For example, lidar systems generate depth estimates with random deviations that closely follow Gaussian patterns under standard operating conditions. This natural alignment between sensor noise and Gaussian assumptions ensures that the modeling framework remains consistent and practical, streamlining the integration of sensor data into AV planning and decision-making processes.
 
 To evaluate the validity of these assumptions, simulated histograms of vehicle positions and velocities were compared against theoretical Gaussian probability density functions. Figure 1 illustrates these distributions for the ego and lead vehicles, demonstrating a strong alignment between the simulated data and the theoretical Gaussian models. This validation supports the appropriateness of Gaussian modeling for these variables, reinforcing the claim that such distributions effectively capture the variability arising from sensor noise and other dynamic factors in traffic scenarios.
 
-```{r echo=FALSE, fig.cap="Gaussian distributions of vehicles.", fig.width=14, fig.height=3}
+```{r echo=FALSE, fig.cap="Empirical histograms and theoretical Gaussian fits for ego and lead vehicle positions (p_e, p_l) and velocities (v_e, v_l), illustrating the suitability of normal assumptions for modeling state uncertainties.", fig.width=14, fig.height=4}
 # Parameters for Gaussian distributions
 mean_ve <- 20  # Ego vehicle mean velocity (m/s)
 std_ve <- 1    # Ego vehicle velocity standard deviation
@@ -49,27 +53,26 @@ p_e_samples <- rnorm(n_samples, mean_pe, std_pe)
 p_l_samples <- rnorm(n_samples, mean_pl, std_pl)
 
 # Generate plots for distributions
-par(mfrow = c(1, 4))
+par(mfrow = c(1, 4), cex = 1, cex.lab = 1.5, cex.main = 1.15)
 hist(p_e_samples, breaks = 50, probability = TRUE, col = 'skyblue', 
      main = 'Position of Ego Vehicle (p_e)', xlab = 'Position (m)')
 curve(dnorm(x, mean_pe, std_pe), add = TRUE, col = 'red', lwd = 2)
-hist(p_l_samples, breaks = 50, probability = TRUE, col = 'lightgreen', 
+hist(p_l_samples, breaks = 50, probability = TRUE, col = 'skyblue', 
      main = 'Position of Leading Vehicle (p_l)', xlab = 'Position (m)')
 curve(dnorm(x, mean_pl, std_pl), add = TRUE, col = 'red', lwd = 2)
-hist(v_e_samples, breaks = 50, probability = TRUE, col = 'lightcoral', 
+hist(v_e_samples, breaks = 50, probability = TRUE, col = 'skyblue', 
      main = 'Velocity of Ego Vehicle (v_e)', xlab = 'Velocity (m/s)')
 curve(dnorm(x, mean_ve, std_ve), add = TRUE, col = 'red', lwd = 2)
-hist(v_l_samples, breaks = 50, probability = TRUE, col = 'gold', 
+hist(v_l_samples, breaks = 50, probability = TRUE, col = 'skyblue', 
      main = 'Velocity of Leading Vehicle (v_l)', xlab = 'Velocity (m/s)')
 curve(dnorm(x, mean_vl, std_vl), add = TRUE, col = 'red', lwd = 2)
-par(mfrow = c(1, 4))
 ```
 
 The framework relies on these distributions to compute risk measures, which are integral to its decision-making process. The severity function \(L\), which quantifies the magnitude of safety violations, is derived as a function of vehicle positions and velocities. For example, the safety constraint \(h(x) = \Delta - (p_l - p_e)\), where \(\Delta\) is the required safety distance, directly depends on the positional estimates \(p_l\) and \(p_e\). By assuming these variables follow Gaussian distributions, the framework can derive a tractable probability density function (PDF) for \(L\), even in the presence of nonlinear constraints. This approach ensures that the risk measure \(E[L]\), which represents the expected severity of violations, is computationally efficient and accurately reflects the probabilistic behavior of traffic participants.
 
 To validate and extend the methodology proposed by Nyberg et al., a Monte Carlo simulation was conducted to replicate the severity distribution and compute risk measures under varying levels of uncertainty. The simulation results revealed that the severity distribution was heavily skewed, with most values concentrated near zero. This pattern reflects the rarity of significant safety violations under optimal planning conditions. The expected severity measure (\(E[L]\)) effectively captured the average magnitude of violations, demonstrating its sensitivity to both the likelihood and severity of events. By contrast, traditional measures such as Value-at-Risk (VaR) and Conditional Value-at-Risk (CVaR) emphasized extreme violations, which limited their ability to account for moderate risks. This distinction highlights the superiority of \(E[L]\) in providing a balanced assessment of safety.
 
-```{r echo=FALSE, fig.cap="Histogram of severity distribution.", fig.width=9, fig.height=4}
+```{r echo=FALSE, fig.cap="Distribution of the severity metric (L) under risk-aware planning, highlighting the rarity of large violations and illustrating key risk measures (E[L], VaR, and CVaR) for evaluating safety performance.", fig.width=9, fig.height=4}
 # Compute safety distance and severity
 delta_samples <- (v_e_samples^2 / 3) - (v_l_samples^2 / 4) + 5  # Safe distance
 h_samples <- delta_samples - (p_l_samples - p_e_samples)  # Safety constraint
@@ -81,7 +84,7 @@ VaR <- quantile(severity, 0.9)  # Value at Risk (90th percentile)
 CVaR <- mean(severity[severity > VaR])  # Conditional Value at Risk (Tail mean)
 
 # Generate severity histogram and plot risk measures
-hist(severity, breaks = 50, probability = TRUE, col = 'blue', 
+hist(severity, breaks = 50, probability = TRUE, col = 'skyblue', 
      main = 'Severity Distribution and Risk Measures', xlab = 'Severity (m)')
 abline(v = expected_severity, col = 'black', lwd = 2, lty = 2)
 abline(v = VaR, col = 'orange', lwd = 2, lty = 2)
@@ -138,10 +141,11 @@ with \(\mu_L\) and \(\sigma_L^2\) defined as \(\mu_L = \mu_\Delta - (p_l - p_e)\
 
 To validate the theoretical derivation, a Monte Carlo simulation was performed, generating random samples of positions and velocities to compute the severity distribution numerically. The parameters for the simulation included realistic values for vehicle dynamics and sensor uncertainties, ensuring alignment with practical AV scenarios. The histogram of the rectified Gaussian distribution of \(L\) is presented in Figure 3, highlighting the skewness and concentration near zero. This pattern reflects the rarity of severe safety violations in well-designed systems.
 
-```{r echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3, fig.cap="Theoretical derivation validation using guassian distribution"}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.height=2, fig.cap="Comparison of theoretically derived and Monte Carlo-simulated severity distributions (L) for validating the rectified Gaussian risk measure. The close alignment underscores the reliability of the analytical approximation."}
 # Load required libraries
 library(ggplot2)
 library(dplyr)
+library(gridExtra)
 
 # Define parameters
 mu_ve <- 20  # Mean velocity of ego vehicle (m/s)
@@ -192,14 +196,16 @@ results <- data.frame(
 )
 
 # Plot rectified Gaussian
-ggplot(data.frame(L = L_samples), aes(x = L)) +
-  geom_histogram(aes(y = ..density..), bins = 50, fill = "lightblue", alpha = 0.7) +
-  geom_density(color = "blue", size = 1) +
+p <- ggplot(data.frame(L = L_samples), aes(x = L)) +
+  geom_histogram(aes(y = ..density..), bins = 50, fill = "skyblue", alpha = 0.7) +
+  geom_density(color = "red", size = 1) +
   labs(title = "Rectified Gaussian Distribution of L",
        x = "Severity (L)", y = "Density") +
   theme_minimal()
 
-results %>% knitr::kable()
+tbl <- gridExtra::tableGrob(results)
+
+grid.arrange(p, tbl, ncol=2)
 ```
 
 The results of the Monte Carlo simulation were compared to the theoretical risk measure, showing a high degree of agreement. This validation confirms the robustness of the Delta Method approximation and underscores the reliability of the proposed risk measure for practical applications. The theoretical proof of the risk measure, combined with its numerical validation, demonstrates the framework's effectiveness in quantifying safety risks under uncertainty. The Delta Method provides an efficient analytical approach, while the Monte Carlo simulation ensures numerical accuracy. Together, these methods strengthen the applicability of Nyberg et al.'s framework to real-world autonomous vehicle motion planning challenges, offering a balance between safety and computational efficiency.
